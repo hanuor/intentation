@@ -16,6 +16,16 @@ package com.hanuor.intentationandroid;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 public class Intentation {
     private Context context;
@@ -23,5 +33,48 @@ public class Intentation {
         this.context = context;
     }
 
+        public String toJsonString(Intent intent) throws JsonProcessingException {
+            String getClassName = intent.getComponent().getClassName();
+            String getContextName = context.getClass().getSimpleName() + ".this";
+            HashMap<String, String> hashMap = new HashMap<String, String>();
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(intent);
+        }
+    public void processIntent(Intent intentObject) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        String getClassName = null;
+        getClassName = intentObject.getComponent().getClassName();
+        String getContextName = null;
+        getContextName = context.getClass().getSimpleName() + ".this";
+        HashMap<String, String> hashMap = new HashMap<String, String>();
+        hashMap.put("className",getClassName);
+        hashMap.put("context",getContextName);
+        Bundle bundle = intentObject.getExtras();
+        if (bundle != null) {
+            Set<String> keys = bundle.keySet();
+            Iterator<String> it = keys.iterator();
+
+            while (it.hasNext()) {
+                String key = it.next();
+                hashMap.put(key, bundle.get(key).toString());
+            }
+        }
+        String intentString  = mapper.writeValueAsString(intentObject);
+        StringBuilder a1S = new StringBuilder(mapper.writeValueAsString(hashMap));
+        a1S.deleteCharAt(mapper.writeValueAsString(hashMap).length()-1);
+        a1S.append(",");
+        String s1t = a1S.toString();
+
+        StringBuilder sb = new StringBuilder(intentString);
+        sb.deleteCharAt(0);
+        String retrString = sb.toString();
+        StringBuilder newS = new StringBuilder();
+        newS.append(s1t);
+        newS.append(retrString);
+        Log.d("Intentation",""+ newS.toString());
+
+    }
 
 }

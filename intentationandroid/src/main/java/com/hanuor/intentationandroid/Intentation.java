@@ -18,7 +18,6 @@ package com.hanuor.intentationandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +40,7 @@ public class Intentation {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(intent);
         }
-    public void processIntent(Intent intentObject) throws JsonProcessingException {
+    public String processIntent(Intent intentObject) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
 
         String getClassName = null;
@@ -73,8 +72,7 @@ public class Intentation {
         StringBuilder newS = new StringBuilder();
         newS.append(s1t);
         newS.append(retrString);
-        Log.d("Intentation",""+ newS.toString());
-
+        return newS.toString();
     }
 
 }
